@@ -26,9 +26,14 @@ class Board(val sizeX: Int, val sizeY: Int, val nMines: Int) {
     private fun index(x: Int, y: Int) = y * sizeX + x
 }
 
+interface Display {
+    fun gameOver(x: Int, y: Int)
+    fun neighbours(x: Int, y: Int, neighbours: Int)
+}
+
 class History : LinkedList<Point>()
 
-class SapperGame(sizeX: Int, sizeY: Int, mineNumber: Int, private val ui: UIControl) {
+class SapperGame(sizeX: Int, sizeY: Int, mineNumber: Int, private val display: Display) {
     val board = Board(sizeX, sizeY, mineNumber)
     val history = History()
     var end = false
@@ -38,9 +43,9 @@ class SapperGame(sizeX: Int, sizeY: Int, mineNumber: Int, private val ui: UICont
         history.push(Point(x, y))
         if (board.check(x, y)) {
             val neighbours = board.neighbours(x, y)
-            ui.neighbours(x, y, neighbours)
+            display.neighbours(x, y, neighbours)
         } else {
-            ui.gameOver(x, y)
+            display.gameOver(x, y)
             end = true
         }
     }
