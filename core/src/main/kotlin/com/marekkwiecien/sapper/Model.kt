@@ -6,7 +6,7 @@ interface WithCoordinates {
 }
 
 data class Point(override val x: Int, override val y: Int) : WithCoordinates
-data class Field(override val x: Int, override val y: Int, val mine: Boolean, val neighbourMines: Int, var visited: Boolean = false) : WithCoordinates
+data class Field(override val x: Int, override val y: Int, val mine: Boolean, val neighbourMines: Int) : WithCoordinates
 typealias Mine = Point
 
 

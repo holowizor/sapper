@@ -9,7 +9,7 @@ class Board(val sizeX: Int, val sizeY: Int, val nMines: Int) {
 
     init {
         val mines = randomizeMines(nMines, sizeX * sizeY - 1)
-        fields = Array(sizeX * sizeY, {
+        fields = Array(size = sizeX * sizeY, init = {
             val x = it % sizeX
             val y = it / sizeX
             Field(x, y, isMine(x, y, mines), calculateNeighbourMines(x, y, mines))
@@ -31,7 +31,7 @@ interface Display {
     fun neighbours(x: Int, y: Int, neighbours: Int)
 }
 
-class History : LinkedList<Point>()
+class History : LinkedList<WithCoordinates>()
 
 class SapperGame(sizeX: Int, sizeY: Int, mineNumber: Int, private val display: Display) {
     val board = Board(sizeX, sizeY, mineNumber)

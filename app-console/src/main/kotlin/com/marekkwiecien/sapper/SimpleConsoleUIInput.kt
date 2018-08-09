@@ -1,6 +1,6 @@
 package com.marekkwiecien.sapper
 
- fun SimpleConsoleUIController.parseCommand(sapperGame: SapperGame): Command {
+fun SimpleConsoleUIController.parseCommand(sapperGame: SapperGame): Command {
     val input = readLine()!!
     return if (input.contains('n')) {
         NewGameCommand(this, input)
@@ -55,7 +55,7 @@ class CheckCommand(override val x: Int, override val y: Int, sapperGame: SapperG
 
 class PrintBoardCommand(sapperGame: SapperGame) : UICommand(sapperGame) {
     override fun execute() {
-        sapperGame.board.inspectBoardFields({
+        sapperGame.board.inspectBoardFields {
             var currY = 0
             it.forEach {
                 if (currY < it.y) {
@@ -64,27 +64,37 @@ class PrintBoardCommand(sapperGame: SapperGame) : UICommand(sapperGame) {
                 }
                 if (it.mine) print('X') else print('_')
             }
-        })
+        }
     }
 }
 
 class PrintHistoryCommand(sapperGame: SapperGame) : UICommand(sapperGame) {
     override fun execute() {
-        sapperGame.board.inspectBoardFields({
+        sapperGame.board.inspectBoardFields {
             var currY = 0
             it.forEach {
                 if (currY < it.y) {
                     println()
                     currY = it.y
                 }
-                if (it.visited) print(it.neighbourMines) else print('_')
+                if (mine(it, sapperGame)) print('x')
+                else if (visited(it, sapperGame)) print(it.neighbourMines)
+                else print('_')
             }
-        })
+            println()
+        }
+    }
+
+    private fun visited(field: Field, game: SapperGame): Boolean {
+        return game.history.firstOrNull { it.x == field.x && it.y == field.y } != null
+    }
+    private fun mine(field: Field, game: SapperGame): Boolean {
+        return game.history.firstOrNull { it.x == field.x && it.y == field.y && field.mine } != null
     }
 }
 
 class ListHistoryCommand(sapperGame: SapperGame) : UICommand(sapperGame) {
     override fun execute() {
-        sapperGame.history.forEach({ println("You visited ${it.x}, ${it.y} and there were ${sapperGame.board.neighbours(it.x, it.y)} neighbour gameOver(s)") })
+        sapperGame.history.forEach { println("You visited ${it.x}, ${it.y} and there were ${sapperGame.board.neighbours(it.x, it.y)} neighbour mine(s)") }
     }
 }

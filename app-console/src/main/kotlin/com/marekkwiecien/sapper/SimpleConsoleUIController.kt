@@ -3,11 +3,11 @@ package com.marekkwiecien.sapper
 class SimpleConsoleDisplay : Display {
 
     override fun gameOver(x: Int, y: Int) {
-        println("kaboom! at $x, $y there was a gameOver and now You are dead :)")
+        println("kaboom! at $x, $y there was a mine and now You are dead :)")
     }
 
     override fun neighbours(x: Int, y: Int, neighbours: Int) {
-        println("for element at $x, $y there are $neighbours gameOver(s) nearby")
+        println("for element at $x, $y there are $neighbours mine(s) nearby")
     }
 }
 
